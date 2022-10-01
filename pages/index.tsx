@@ -1,0 +1,31 @@
+import type { NextPage } from "next";
+import Head from "next/head";
+import {PostCard, PostWidget, Categories} from "../components";
+
+const Home: NextPage = () => {
+  const posts = [
+    { title: "sddsdsds", excerpt: "dkdkdkdkdkdkd" },
+    { title: "sddsdsdsdkdkdk", excerpt: "dkdkdkdkdkdkd" },
+  ];
+  return (
+    <div className="container mx-auto px-10 mb-8">
+      <Head>
+        <title>Create Next App</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className=" lg:col-span-8 col-span-1">
+                {posts.map((post) => (<PostCard post={post} key={post.title} />))}
+              </div>
+              <div className="lg:col-span-4 col-span-1">
+                <div className="lg:sticky relative top-8">
+                  <PostWidget />
+                  <Categories />
+                  </div>
+              </div>
+            </div>
+      </div>
+  );
+};
+
+export default Home;
