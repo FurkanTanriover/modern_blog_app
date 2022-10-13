@@ -1,4 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { submitComment } from "../services";
 
 const CommentsForm = ({ slug }) => {
   const [error, setError] = useState(false);
@@ -8,6 +10,11 @@ const CommentsForm = ({ slug }) => {
   const nameEl = useRef();
   const emailEl = useRef();
   const storeDataEl = useRef();
+
+  useEffect(() => {
+    nameEl.current.value = window.localStorage.getItem("name");
+    emailEl.current.value = window.localStorage.getItem("email");
+  }, []);
 
   const handleCommentSubmission = () => {
     setError(false);
@@ -27,19 +34,27 @@ const CommentsForm = ({ slug }) => {
       slug,
     };
 
-    if(storeData) {
-      localStorage.setItem('name', name);
-      localStorage.setItem('email', email);
+    if (storeData) {
+      window.localStorage.setItem("name", name);
+      window.localStorage.setItem("email", email);
+    } else {
+      window.localStorage.removeItem("name");
+      window.localStorage.removeItem("email");
     }
-    else{
-      localStorage.removeItem('name');
-      localStorage.removeItem('email');
-    }
+    console.log("11",commentObj);
+
+    submitComment(commentObj)
+    .then((res)=>{
+      setShowSuccessMessage(true);
+      setTimeout(()=>{
+        setShowSuccessMessage(false);
+      }, 3000);
+    })
   };
 
   return (
     <div className=" bg-white p-8 rounded-lg pb-12 mb-8">
-      <h3 className=" text-xl mb-8 font-semibold border-b pb-4">CommentsForm</h3>
+      <h3 className=" text-xl mb-8 font-semibold border-b pb-4">Leave a Reply</h3>
       <div className="grid grid-cols-1  gap-4 mb-4">
         <textarea
           placeholder="Comment"
@@ -67,7 +82,9 @@ const CommentsForm = ({ slug }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         <div>
           <input ref={storeDataEl} type="checkbox" id="storeData" name="storeData" value={true} />
-            <label className="text-gray-500 cursor-pointer pl-2" htmlFor="storeData">Save my e-mail and name for the next time I comment </label>
+          <label className="text-gray-500 cursor-pointer pl-2" htmlFor="storeData">
+            Save my e-mail and name for the next time I comment{" "}
+          </label>
         </div>
       </div>
       {error && <p className="text-xs text-red-500">All fields are required</p>}
