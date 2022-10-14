@@ -41,8 +41,7 @@ const CommentsForm = ({ slug }) => {
       window.localStorage.removeItem("name");
       window.localStorage.removeItem("email");
     }
-    console.log("11",commentObj);
-
+    
     submitComment(commentObj)
     .then((res)=>{
       setShowSuccessMessage(true);

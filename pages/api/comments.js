@@ -16,8 +16,6 @@
   `;
     try{
       const result= await graphQLClient.request(query, req.body);
-      console.log("62")
-
       return res.status(200).send(result);
     } catch(err){
       console.log("31")
